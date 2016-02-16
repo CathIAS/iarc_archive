@@ -1,0 +1,535 @@
+<?xml version="1.0"?>
+<robot name="iarc_uav" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
+	<xacro:property name="c_w" value=".05" />
+	<xacro:property name="a_w" value=".25" />
+	<xacro:property name="s_w" value=".01" />
+	<xacro:property name="b_r" value=".1" />
+	<xacro:property name="b_l" value=".01" />
+  	<xacro:property name="camera_link" value="0.03" /> <!-- Size of square 'camera' box -->
+  	<xacro:property name="camera_side" value="0.01" /> <!-- Size of square 'camera' box -->
+	<xacro:property name="pi" value="3.1415926" />
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find iarc_world)/uav_description/uav.gazebo" />
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find iarc_world)/uav_description/materials.xacro" />
+
+  
+  <link name="center">
+    <visual>
+      <geometry>
+		<box size="${c_w} ${c_w} ${c_w}"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  
+  <link name="arm1">
+    <collision>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 ${c_w/2+a_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+			<material name="red" />
+      <origin rpy="0 0 0" xyz="0 ${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+
+  <link name="arm2">
+    <collision>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 ${pi/2}" xyz="${c_w/2+a_w/2} 0 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+			<material name="white" />
+      <origin rpy="0 0 ${pi/2}" xyz="${c_w/2+a_w/2} 0 0"/>
+    </visual>
+  </link>
+	<link name="arm3">
+    <collision>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 -${c_w/2+a_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+			<material name="red" />
+      <origin rpy="0 0 0" xyz="0 -${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+	<link name="arm4">
+    <collision>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 ${pi/2}" xyz="-${c_w/2+a_w/2} 0 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${c_w} ${a_w} ${c_w}"/>
+      </geometry>
+			<material name="red" />
+      <origin rpy="0 0 ${pi/2}" xyz="-${c_w/2+a_w/2} 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="c_to_arm1" type="fixed">
+    <parent link="center"/>
+    <child link="arm1"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+  <joint name="c_to_arm2" type="fixed">
+    <parent link="center"/>
+    <child link="arm2"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+  <joint name="c_to_arm3" type="fixed">
+    <parent link="center"/>
+    <child link="arm3"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+  <joint name="c_to_arm4" type="fixed">
+    <parent link="center"/>
+    <child link="arm4"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+  		
+	<link name="blade1">
+    <visual>
+      <geometry>
+        <cylinder length="${b_l}" radius="${b_r}"/>
+      </geometry>
+      <material name="grey">
+        <color rgba=".8 .8 .8 .8"/>
+      </material>
+      <origin rpy="0 0 0" xyz="${c_w/2+a_w/2} ${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_blade1" type="fixed">
+    <parent link="center"/>
+    <child link="blade1"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+	
+	<link name="blade2">
+    <visual>
+      <geometry>
+        <cylinder length="${b_l}" radius="${b_r}"/>
+      </geometry>
+      <material name="grey">
+        <color rgba=".8 .8 .8 .8"/>
+      </material>
+      <origin rpy="0 0 0" xyz="-${c_w/2+a_w/2} ${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_blade2" type="fixed">
+    <parent link="center"/>
+    <child link="blade2"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="blade3">
+    <visual>
+      <geometry>
+        <cylinder length="${b_l}" radius="${b_r}"/>
+      </geometry>
+      <material name="grey">
+        <color rgba=".8 .8 .8 .8"/>
+      </material>
+      <origin rpy="0 0 0" xyz="-${c_w/2+a_w/2} -${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_blade3" type="fixed">
+    <parent link="center"/>
+    <child link="blade3"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="blade4">
+    <visual>
+      <geometry>
+        <cylinder length="${b_l}" radius="${b_r}"/>
+      </geometry>
+      <material name="grey">
+        <color rgba=".8 .8 .8 .8"/>
+      </material>
+      <origin rpy="0 0 0" xyz="${c_w/2+a_w/2} -${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_blade4" type="fixed">
+    <parent link="center"/>
+    <child link="blade4"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+
+	<link name="side11">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="${c_w/2+a_w+s_w/2} ${c_w/2+a_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 0" xyz="${c_w/2+a_w+s_w/2} ${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side11" type="fixed">
+    <parent link="center"/>
+    <child link="side11"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="side12">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="${c_w/2+a_w+s_w/2} -${c_w/2+a_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 0" xyz="${c_w/2+a_w+s_w/2} -${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side12" type="fixed">
+    <parent link="center"/>
+    <child link="side12"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="side21">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-${c_w/2+a_w+s_w/2} ${c_w/2+a_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 0" xyz="-${c_w/2+a_w+s_w/2} ${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side21" type="fixed">
+    <parent link="center"/>
+    <child link="side21"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="side22">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-${c_w/2+a_w+s_w/2} -${c_w/2+a_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 0" xyz="-${c_w/2+a_w+s_w/2} -${c_w/2+a_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side22" type="fixed">
+    <parent link="center"/>
+    <child link="side22"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+	
+	<link name="side31">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 ${pi/2}" xyz="${c_w/2+a_w/2} -${c_w/2+a_w+s_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 ${pi/2}" xyz="${c_w/2+a_w/2} -${c_w/2+a_w+s_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side31" type="fixed">
+    <parent link="center"/>
+    <child link="side31"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="side32">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 ${pi/2}" xyz="-${c_w/2+a_w/2} -${c_w/2+a_w+s_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 ${pi/2}" xyz="-${c_w/2+a_w/2} -${c_w/2+a_w+s_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side32" type="fixed">
+    <parent link="center"/>
+    <child link="side32"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="side41">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 ${pi/2}" xyz="${c_w/2+a_w/2} ${c_w/2+a_w+s_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 ${pi/2}" xyz="${c_w/2+a_w/2} ${c_w/2+a_w+s_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side41" type="fixed">
+    <parent link="center"/>
+    <child link="side41"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+	<link name="side42">
+    <collision>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <origin rpy="0 0 ${pi/2}" xyz="-${c_w/2+a_w/2} ${c_w/2+a_w+s_w/2} 0"/>
+    </collision>
+    <visual>
+      <geometry>
+        <box size="${s_w} ${a_w} ${c_w}"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+      <origin rpy="0 0 ${pi/2}" xyz="-${c_w/2+a_w/2} ${c_w/2+a_w+s_w/2} 0"/>
+    </visual>
+  </link>
+  <joint name="c_to_side42" type="fixed">
+    <parent link="center"/>
+    <child link="side42"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <joint name="hokuyo_joint" type="fixed">
+    <origin xyz="0 0 ${c_w/2+0.05}" rpy="0 0 0"/>
+    <parent link="center"/>
+    <child link="hokuyo_link"/>
+  </joint>
+
+  <!-- Hokuyo Laser -->
+  <link name="hokuyo_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://iarc_world/uav_description/meshes/hokuyo.dae"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- Camera 0 -->
+  <joint name="camera_joint0" type="fixed">
+    <origin xyz="0 0 ${-c_w}" rpy="0 ${pi/2} 0"/>
+    <parent link="center"/>
+    <child link="camera_link0"/>
+  </joint>
+
+  <link name="camera_link0">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- Camera 1 -->
+  <joint name="camera_joint1" type="fixed">
+    <origin xyz="${c_w/2+a_w} 0 0" rpy="0 0 0"/>
+    <parent link="arm2"/>
+    <child link="camera_link1"/>
+  </joint>
+
+  <link name="camera_link1">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- Camera 2 -->
+  <joint name="camera_joint2" type="fixed">
+    <origin xyz="-${c_w/2+a_w} 0 0" rpy="0 0 ${pi}"/>
+    <parent link="arm4"/>
+    <child link="camera_link2"/>
+  </joint>
+
+  <link name="camera_link2">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- Camera 3 -->
+  <joint name="camera_joint3" type="fixed">
+    <origin xyz="0 ${c_w/2+a_w} 0" rpy="0 0 ${pi/2}"/>
+    <parent link="arm1"/>
+    <child link="camera_link3"/>
+  </joint>
+
+  <link name="camera_link3">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- Camera 4 -->
+  <joint name="camera_joint4" type="fixed">
+    <origin xyz="0 -${c_w/2+a_w} 0" rpy="0 0 ${pi*1.5}"/>
+    <parent link="arm3"/>
+    <child link="camera_link4"/>
+  </joint>
+
+  <link name="camera_link4">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+		<box size="${camera_side} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+</robot>

@@ -1,0 +1,3 @@
+roslaunch iarc_world world.launch
+rosrun iarc_world_run game_run
+rosrun iarc_world_run image_process

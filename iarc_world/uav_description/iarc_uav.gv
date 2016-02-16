@@ -1,0 +1,62 @@
+digraph G {
+node [shape=box];
+"world" [label="world"];
+"center" [label="center"];
+"arm1" [label="arm1"];
+"camera_link1" [label="camera_link1"];
+"arm2" [label="arm2"];
+"arm3" [label="arm3"];
+"arm4" [label="arm4"];
+"blade1" [label="blade1"];
+"blade2" [label="blade2"];
+"blade3" [label="blade3"];
+"blade4" [label="blade4"];
+"side11" [label="side11"];
+"side12" [label="side12"];
+"side21" [label="side21"];
+"side22" [label="side22"];
+"side31" [label="side31"];
+"side32" [label="side32"];
+"side41" [label="side41"];
+"side42" [label="side42"];
+"hokuyo_link" [label="hokuyo_link"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"world" -> "fixed" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"fixed" -> "center"
+"center" -> "c_to_arm1" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_arm1" -> "arm1"
+"arm1" -> "camera_joint1" [label="xyz: 0.275 0 0 \nrpy: 0 -0 0"]
+"camera_joint1" -> "camera_link1"
+"center" -> "c_to_arm2" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_arm2" -> "arm2"
+"center" -> "c_to_arm3" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_arm3" -> "arm3"
+"center" -> "c_to_arm4" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_arm4" -> "arm4"
+"center" -> "c_to_blade1" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_blade1" -> "blade1"
+"center" -> "c_to_blade2" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_blade2" -> "blade2"
+"center" -> "c_to_blade3" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_blade3" -> "blade3"
+"center" -> "c_to_blade4" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_blade4" -> "blade4"
+"center" -> "c_to_side11" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side11" -> "side11"
+"center" -> "c_to_side12" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side12" -> "side12"
+"center" -> "c_to_side21" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side21" -> "side21"
+"center" -> "c_to_side22" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side22" -> "side22"
+"center" -> "c_to_side31" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side31" -> "side31"
+"center" -> "c_to_side32" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side32" -> "side32"
+"center" -> "c_to_side41" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side41" -> "side41"
+"center" -> "c_to_side42" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"c_to_side42" -> "side42"
+"center" -> "hokuyo_joint" [label="xyz: 0 0 0.075 \nrpy: 0 -0 0"]
+"hokuyo_joint" -> "hokuyo_link"
+}

@@ -1,0 +1,194 @@
+#include <iostream>
+#include <cmath>
+#include <stdio.h>
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+using namespace std;
+namespace enc = sensor_msgs::image_encodings;
+
+static const char WINDOW[] = "Image window";
+int p_trackbar = 150, p_trackbar1 = 50, p_trackbar2 = 150;
+cv::Mat img[2];
+cv::Mat img_g[2];
+cv::Mat edge[2];
+bool recieved[2] = {false, false};
+int curr_step;
+const int valid_steps = 5;
+const int error_steps = 6;
+
+//once this variable is set to true, ros node shutsdown and the program exits.
+bool global_break = false;
+
+class ImageConverter
+{
+  ros::NodeHandle nh_;
+  image_transport::ImageTransport it_;
+  image_transport::Subscriber image_sub_;
+  //image_transport::Publisher image_pub_;
+  
+public:
+  ImageConverter()
+    : it_(nh_)
+  {
+    //image_pub_ = it_.advertise("out", 1);
+    image_sub_ = it_.subscribe("in", 1, &ImageConverter::imageCb, this);
+
+  }
+
+  ~ImageConverter()
+  {
+    cv::destroyWindow(WINDOW);
+  }
+
+  void imageCb(const sensor_msgs::ImageConstPtr& msg)
+  {
+    cv_bridge::CvImagePtr cv_ptr;
+    try
+    {
+      cv_ptr = cv_bridge::toCvCopy(msg, enc::BGR8);
+    }
+    catch (cv_bridge::Exception& e)
+    {
+      ROS_INFO("cv_bridge exception: %s", e.what());
+      return;
+    }
+
+    if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
+      cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
+
+    cv::imshow(WINDOW, cv_ptr->image);
+    cv::waitKey(0);
+    
+    //image_pub_.publish(cv_ptr->toImageMsg());
+  }
+};
+
+void img_proc()
+{
+	ROS_INFO("Enter image processing function");
+	if (recieved[0]==true && recieved[1]==true)
+	{
+		for (int i = 0; i < 2; i++)
+		{		
+			cv::cvtColor( img[i], img_g[i], cv::COLOR_RGB2GRAY );
+			cv::Canny( img_g[i], edge[i], p_trackbar1, p_trackbar2, 3 );
+
+			vector<cv::Vec4i> p_lines;
+
+			/// 2. Use Probabilistic Hough Transform
+			cv::HoughLinesP( edge[i], p_lines, 1, M_PI/180, p_trackbar, 30, 10 );
+
+			// Show the result
+			for( size_t j = 0; j < p_lines.size(); j++ )
+			{
+				cv::Vec4i l = p_lines[j];
+				cv::line( img[i], cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(255,0,0), 3, 16);
+			}
+		}
+		cv::Mat concat_img(cv::Size(img[0].cols*2,img[0].rows), CV_8UC3);
+		cv::Mat sub_img = concat_img.colRange(0,img[0].cols); img[0].copyTo(sub_img);
+		sub_img = concat_img.colRange(img[0].cols,2*img[0].cols); img[1].copyTo(sub_img);
+			
+    	cv::imshow(WINDOW, concat_img);
+    	if (cv::waitKey(2) == 27)
+			ros::shutdown();
+		
+
+		//set flags to zero after image processing
+		recieved[0]=false;recieved[1]=false;
+	}
+	else 
+		//TODO:add warning
+		return;
+		
+}
+
+void imageCb1(const sensor_msgs::ImageConstPtr& msg)
+{
+	//ROS_INFO("Enter call back function1, time is %i",msg->header.stamp.nsec);
+	ROS_INFO("Enter call back function1, step is %i, curr is %i",msg->header.seq, curr_step);
+	ROS_INFO("states - %i, %i",recieved[0],recieved[1]);
+	if (recieved[0]==false && recieved[1]==false)
+		curr_step = msg->header.seq;
+	if ((curr_step - msg->header.seq >=0 && curr_step - msg->header.seq<=valid_steps) ||
+		(msg->header.seq - curr_step >=0 && msg->header.seq - curr_step<=valid_steps))
+	{
+		recieved[0] = true;
+		cv_bridge::CvImagePtr cv_ptr;
+		try
+		{
+			cv_ptr = cv_bridge::toCvCopy(msg, enc::BGR8);
+		}
+		catch (cv_bridge::Exception& e)
+		{
+			ROS_INFO("cv_bridge exception: %s", e.what());
+			return;
+		}
+		cv_ptr->image.copyTo(img[0]);
+	}
+	else if (abs(msg->header.seq-curr_step) >= error_steps)
+	{
+		curr_step = msg->header.seq;
+		recieved[0]=false;recieved[1]=false;
+	}
+
+	if (recieved[0]==true && recieved[1]==true )
+		img_proc();
+		
+}
+void imageCb2(const sensor_msgs::ImageConstPtr& msg)
+{
+	//ROS_INFO("Enter call back function2, time is %i",msg->header.stamp.nsec);
+	ROS_INFO("Enter call back function2, step is %i, curr is %i",msg->header.seq, curr_step);
+	ROS_INFO("states - %i, %i",recieved[0],recieved[1]);
+	if (recieved[0]==false && recieved[1]==false )
+		curr_step = msg->header.seq;
+	if ((curr_step - msg->header.seq >=0 && curr_step - msg->header.seq<=valid_steps) ||
+		(msg->header.seq - curr_step >=0 && msg->header.seq - curr_step<=valid_steps))
+	{
+		recieved[1] = true;
+		cv_bridge::CvImagePtr cv_ptr;
+		try
+		{
+			cv_ptr = cv_bridge::toCvCopy(msg, enc::BGR8);
+		}
+		catch (cv_bridge::Exception& e)
+		{
+			ROS_INFO("cv_bridge exception: %s", e.what());
+			return;
+		}
+		cv_ptr->image.copyTo(img[1]);
+	}
+	else if (abs(msg->header.seq-curr_step) >= error_steps)
+	{
+		curr_step = msg->header.seq;
+		recieved[0]=false;recieved[1]=false;
+	}
+
+	if (recieved[0]==true && recieved[1]==true)
+		img_proc();
+}
+
+int main(int argc, char** argv)
+{
+  cv::namedWindow(WINDOW, cv::WINDOW_NORMAL);
+  cv::createTrackbar( "Hough thres", WINDOW, &p_trackbar, 300);
+  cv::createTrackbar( "Canny Low thres", WINDOW, &p_trackbar1, 100);
+  cv::createTrackbar( "Canny high thres", WINDOW, &p_trackbar2, 300);
+  ros::init(argc, argv, "image_converter");
+  ros::NodeHandle nh_;
+  image_transport::ImageTransport it_(nh_);
+  image_transport::Subscriber image_sub1, image_sub2;
+
+  image_sub1 = it_.subscribe("/iarc_uav/camera1/image_raw", 3, imageCb1);
+  image_sub2 = it_.subscribe("/iarc_uav/camera2/image_raw", 3, imageCb2);
+  //ImageConverter ic;
+  ros::spin();
+  return 0;
+}

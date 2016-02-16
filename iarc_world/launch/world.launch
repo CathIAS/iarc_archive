@@ -1,0 +1,24 @@
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="true"/>
+  <arg name="debug" default="false"/>
+
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find iarc_world)/worlds/iarc_complex.world"/>
+		<!--
+		-->
+    <!-- more default parameters can be changed here -->
+  </include>
+	<!-- Convert an xacro and put on parameter server --> 
+	<param name="robot_description" command="$(find xacro)/xacro.py $(find iarc_world)/uav_description/uav.xacro" />
+ 
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+	args="-urdf -model iarc_uav -param robot_description"/>
+</launch>

@@ -1,0 +1,515 @@
+<?xml version='1.0'?>
+<sdf version='1.4'>
+  <model name='iarc_uav'>
+    <link name='center'>
+      <pose>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0.1375 0 0.0375 0 -0 0</pose>
+        <mass>2e-05</mass>
+        <inertia>
+          <ixx>2.02813e-06</ixx>
+          <ixy>0</ixy>
+          <ixz>1.03125e-07</ixz>
+          <iyy>2.40625e-06</iyy>
+          <iyz>0</iyz>
+          <izz>2.37812e-06</izz>
+        </inertia>
+      </inertial>
+      <collision name='center_collision_arm1'>
+        <pose>0 0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_arm2'>
+        <pose>0.15 0 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_arm3'>
+        <pose>0 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_arm4'>
+        <pose>-0.15 0 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_camera_link1'>
+        <pose>0.275 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.03 0.03</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_hokuyo_link'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side11'>
+        <pose>0.28 0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side12'>
+        <pose>0.28 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side21'>
+        <pose>-0.28 0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side22'>
+        <pose>-0.28 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side31'>
+        <pose>0.15 -0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side32'>
+        <pose>-0.15 -0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side41'>
+        <pose>0.15 0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <collision name='center_collision_side42'>
+        <pose>-0.15 0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='center_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.05 0.05</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Black</name>
+            <uri>__default__</uri>
+          </script>
+        </material>
+      </visual>
+      <visual name='center_visual_arm1'>
+        <pose>0 0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_arm2'>
+        <pose>0.15 0 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_arm3'>
+        <pose>0 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_arm4'>
+        <pose>-0.15 0 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.05 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_blade1'>
+        <pose>0.15 0.15 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.01</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='center_visual_blade2'>
+        <pose>-0.15 0.15 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.01</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='center_visual_blade3'>
+        <pose>-0.15 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.01</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='center_visual_blade4'>
+        <pose>0.15 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.01</length>
+            <radius>0.1</radius>
+          </cylinder>
+        </geometry>
+      </visual>
+      <visual name='center_visual_camera_link1'>
+        <pose>0.275 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.03 0.03</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_hokuyo_link'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://iarc_world/uav_description/meshes/hokuyo.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side11'>
+        <pose>0.28 0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side12'>
+        <pose>0.28 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side21'>
+        <pose>-0.28 0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side22'>
+        <pose>-0.28 -0.15 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side31'>
+        <pose>0.15 -0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side32'>
+        <pose>-0.15 -0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side41'>
+        <pose>0.15 0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <visual name='center_visual_side42'>
+        <pose>-0.15 0.28 0 0 -0 1.5708</pose>
+        <geometry>
+          <box>
+            <size>0.01 0.25 0.05</size>
+          </box>
+        </geometry>
+      </visual>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <sensor name='camera1' type='camera'>
+        <update_rate>30</update_rate>
+        <camera name='head'>
+          <horizontal_fov>1.39626</horizontal_fov>
+          <image>
+            <width>240</width>
+            <height>320</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>30</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name='camera_controller' filename='libgazebo_ros_camera.so'>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>iarc_uav/camera1</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>camera_link1</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+        <pose>0.275 0 0 0 -0 0</pose>
+      </sensor>
+      <gravity>1</gravity>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <self_collide>0</self_collide>
+      <sensor name='head_hokuyo_sensor' type='gpu_ray'>
+        <visualize>1</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>720</samples>
+              <resolution>1</resolution>
+              <min_angle>-2.0944</min_angle>
+              <max_angle>2.0944</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.03</min>
+            <max>3</max>
+            <resolution>0.005</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name='gazebo_ros_head_hokuyo_controller' filename='libgazebo_ros_gpu_laser.so'>
+          <topicName>/iarc_uav/laser/scan</topicName>
+          <frameName>hokuyo_link</frameName>
+        </plugin>
+        <pose>0 0 0.075 0 -0 0</pose>
+      </sensor>
+    </link>
+    <joint name='fixed' type='revolute'>
+      <child>center</child>
+      <parent>world</parent>
+      <axis>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+        </limit>
+        <dynamics>
+          <damping>0</damping>
+        </dynamics>
+        <xyz>0 0 1</xyz>
+      </axis>
+    </joint>
+  </model>
+</sdf>

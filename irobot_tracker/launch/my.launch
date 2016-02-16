@@ -1,0 +1,12 @@
+<launch>
+	<node name="ASI_tracker" pkg="irobot_tracker" type="ASI_tracker" output="screen" />
+	<param name="set_bright" value="12" />
+	<param name="set_gain" value="30" />
+	<param name="set_exposure" value="9000" />
+	<param name="set_gamma" value="100" />
+	<param name="set_wb_r" value="70" />
+	<param name="set_wb_b" value="100" />
+
+	<param name="camera_param" value="/home/yangdji/UAV_ROS_pkgs/src/irobot_tracker/asi_cam_param.xml" />
+	
+</launch>

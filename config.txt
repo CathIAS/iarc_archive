@@ -1,0 +1,16 @@
+h264_1=readsave001.h264
+h264_2=readsave002.h264
+h264_3=readsave003.h264
+h264_4=readsave004.h264
+cameranum=2
+usbon=1
+realtimeshow=1
+#save the source video?
+savevideo=1
+#save the output rgb/yuv video?
+saveoutput=1
+#rgbformat=1 then output rgb file,otherwise,output yuv format video
+rgbformat=0
+log=0
+statistic=0
+sharefilepath=/home/iarc/catkin_ws

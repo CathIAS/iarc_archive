@@ -1,0 +1,4 @@
+<launch>
+  <node name="record1" pkg="image_view" type="video_recorder" output="screen"
+	args="image:=/iarc_uav/camera3/image_raw"/>
+</launch>

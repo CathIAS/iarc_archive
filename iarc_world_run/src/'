@@ -1,0 +1,175 @@
+#ifndef MAIN_H
+#define MAIN_H
+#include "ros/ros.h"
+#include "gazebo_msgs/SetModelState.h"
+#include "gazebo_msgs/GetModelState.h"
+#include "gazebo_msgs/GetPhysicsProperties.h"
+#include "gazebo_msgs/GetWorldProperties.h"
+#include "gazebo_msgs/ModelState.h"
+#include <cstring>
+#include <cmath>
+#define PI 3.14159265
+
+/********* Global Variable Definition *********/
+int rob_ctl_rate = 5;
+int uav_ctl_rate = 60;
+static const int rob_num = 10;
+static const int o_rob_num = 4;
+double init_r1 = 1.0;
+double init_r2 = 5.0;
+
+double rob_speed_o = 0.333333; 
+double o_rob_period = PI*init_r2*2/rob_speed_o;
+double o_rob_ang_speed = 360/o_rob_period/rob_ctl_rate;
+double rob_speed = 0.333333/rob_ctl_rate; 
+
+std::string rob_name_list[rob_num] = {"create", "create_0", 
+																 "create_1", "create_2",
+																 "create_3", "create_4",
+																 "create_5", "create_6",
+																 "create_7", "create_8"};
+std::string o_rob_name_list[o_rob_num] = 
+		{"iarc_obstacle_robot", "iarc_obstacle_robot_0", 
+		 "iarc_obstacle_robot_1", "iarc_obstacle_robot_2"};
+double o_rob_ang_list[o_rob_num] = {135,225,315,45};
+
+ros::ServiceClient rst_c;
+ros::ServiceClient gpp_c;
+ros::ServiceClient gms_c;
+ros::ServiceClient sms_c;
+
+void init_game_field()
+{
+	gazebo_msgs::SetModelState setmodelstate;
+	gazebo_msgs::ModelState modelstate;
+	geometry_msgs::Twist twist;
+	geometry_msgs::Pose pose;
+
+	//place ordinary iRobots
+	for (int i = 0; i < rob_num; i++)
+	{
+		twist.linear.x = 0.0; twist.linear.y = 0.0; twist.linear.z = 0.0;
+		twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = 0.0;
+
+		pose.position.x = init_r1*cos(i*36*PI/180);
+		pose.position.y = init_r1*sin(i*36*PI/180);
+		pose.position.z = 0;
+		pose.orientation.x = 0.0;
+		pose.orientation.y = 0.0;
+		pose.orientation.z = sin(i*18*PI/180);
+		pose.orientation.w = cos(i*18*PI/180);
+
+		modelstate.model_name =rob_name_list[i];
+		modelstate.pose = pose;
+		modelstate.twist = twist;
+
+		setmodelstate.request.model_state=modelstate;         
+
+ 		sms_c.call(setmodelstate);
+  	ros::spinOnce();
+	}
+
+	//place obstacle iRobots
+	for (int i = 0; i < o_rob_num; i++)
+	{
+		twist.linear.x = 0.0; twist.linear.y = 0.0; twist.linear.z = 0.0;
+		twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = 0.0;
+
+		pose.position.x = init_r2*cos(o_rob_ang_list[i]*PI/180);
+		pose.position.y = init_r2*sin(o_rob_ang_list[i]*PI/180);
+		pose.position.z = 0;
+		pose.orientation.x = 0.0;
+		pose.orientation.y = 0.0;
+		pose.orientation.z = sin(o_rob_ang_list[i]/2*PI/180);
+		pose.orientation.w = cos(o_rob_ang_list[i]/2*PI/180);
+
+		modelstate.model_name = o_rob_name_list[i];
+		modelstate.pose = pose;
+		modelstate.twist = twist;
+		setmodelstate.request.model_state=modelstate;         
+
+ 		sms_c.call(setmodelstate);
+  	ros::spinOnce();
+	}
+
+	//place UAV
+	twist.linear.x = 0.0; twist.linear.y = 0.0; twist.linear.z = 0.0;
+	twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = 0.0;
+
+	pose.position.x = 10; 
+	pose.position.y = 0;
+	pose.position.z = 0;
+	pose.orientation.x = 0.0;
+	pose.orientation.y = 0.0;
+	pose.orientation.z = 0.0;
+	pose.orientation.w = 0.0;
+
+	modelstate.model_name = "iarc_uav";
+	modelstate.pose = pose;
+	modelstate.twist = twist;
+
+	setmodelstate.request.model_state=modelstate;         
+
+	sms_c.call(setmodelstate);
+	ros::spinOnce();
+}
+
+void move_robots()
+{
+	ros::Rate loop_rate(rob_ctl_rate);
+	geometry_msgs::Twist twist;
+	geometry_msgs::Pose pose;
+	gazebo_msgs::GetModelState getmodelstate;
+	gazebo_msgs::SetModelState setmodelstate;
+	gazebo_msgs::ModelState modelstate;
+	//move obstacle robots first (easy to move)
+	while (ros::ok())
+	{
+		//place obstacle iRobots
+		for (int i = 0; i < o_rob_num; i++)
+		{
+			getmodelstate.request.model_name = o_rob_name_list[i];
+			gms_c.call(getmodelstate);
+
+			twist.linear.x = 0.0; twist.linear.y = 0.0; twist.linear.z = 0.0;
+			twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = 0.0;
+
+			double ang = o_rob_ang_list[i]/180*PI;
+			std::cout<<i<<" x "<<getmodelstate.response.pose.position.x<<std::endl;
+			std::cout<<i<<" y "<<getmodelstate.response.pose.position.y<<std::endl;
+			std::cout<<i<<" dx "<<rob_speed*cos(ang)<<std::endl;
+			std::cout<<i<<" dy "<<rob_speed*sin(ang)<<std::endl;
+			pose.position.x = 
+				getmodelstate.response.pose.position.x + 
+				rob_speed*cos(ang);
+			pose.position.y = 
+				getmodelstate.response.pose.position.y + 
+				rob_speed*sin(ang);
+			pose.position.z = getmodelstate.response.pose.position.z;
+
+			o_rob_ang_list[i] += o_rob_ang_speed;
+			if (o_rob_ang_list[i] > 360)
+				o_rob_ang_list[i] -= 360;
+			std::cout<<i<<" "<<o_rob_ang_list[i]<<std::endl;
+			ang = o_rob_ang_list[i]/180*PI;
+		
+			pose.orientation.x = 0.0;
+			pose.orientation.y = 0.0;
+			pose.orientation.z = sin(ang/2);
+			pose.orientation.w = cos(ang/2);
+
+			modelstate.model_name = o_rob_name_list[i];
+			modelstate.pose = pose;
+			modelstate.twist = twist;
+			setmodelstate.request.model_state=modelstate;         
+
+			sms_c.call(setmodelstate);
+		}
+		
+  	ros::spinOnce();
+		loop_rate.sleep();
+	}
+}
+
+
+#endif
